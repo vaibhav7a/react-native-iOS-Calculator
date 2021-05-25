@@ -1,17 +1,37 @@
-import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useRef} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import * as Animatable from 'react-native-animatable';
 
 const CustomButton = props => {
-    const handleClick = () => {
-       // console.log(props.text);
-        props.onPress(props.text);
+  const handleRef = useRef();
+  const handleClick = () => {
+    // console.log(props.text);
+    if (props.text === 'AC') {
+      handleRef.current.rotate(500);
+    } else if (props.text === '÷' || props.text === 'x' || props.text === '-' || props.text === '+' || props.text === '=') {
+      handleRef.current.zoomIn(500);
+    }else {
+      handleRef.current.jello(1000);
     }
+    props.onPress(props.text);
+  };
   return (
-    <TouchableOpacity style={[styels.button, {backgroundColor: props.bgColor}]} onPress={handleClick}>
-      <Text style={[styels.text, {color: props.textColor}]}>
-        {props.text}
-      </Text>
-    </TouchableOpacity>
+    <TouchableWithoutFeedback
+      style={[styels.button, {backgroundColor: props.bgColor}]}
+      onPress={handleClick}>
+      <Animatable.View
+        ref={handleRef}
+        style={[styels.button, {backgroundColor: props.bgColor}]}>
+        <Text style={[styels.text, {color: props.textColor}]}>
+          {props.text}
+        </Text>
+      </Animatable.View>
+    </TouchableWithoutFeedback>
   );
 };
 
